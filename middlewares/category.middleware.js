@@ -38,17 +38,29 @@ const createCategoryValidator = (req, res, next) => {
                 res.locals.errorMessage.push("setIndex should true or false");
             }
         }
-        let { name } = req.body;
-        name = name.trim();
-        if (!name || typeof name !== 'string' || name.length < 2 || name.length > 100 || name === "") {
+        if (!req.body.name || typeof req.body.name !== 'string') {
             res.locals.error = true;
             res.locals.errorMessage.push("name is required and should be more than 2 characters, less than 100 characters");
         }
-        let { linkToPage } = req.body;
-        linkToPage = linkToPage.trim();
-        if (!linkToPage || typeof linkToPage !== 'string' || linkToPage.length < 2 || linkToPage.length > 300 || name === "") {
+        else {
+            let { name } = req.body;
+            name = name.trim();
+            if (name.length < 2 || name.length > 100 || name === "") {
+                res.locals.error = true;
+                res.locals.errorMessage.push("name is required and should be more than 2 characters, less than 100 characters");
+            }
+        }
+        if (!req.body.linkToPage || typeof req.body.linkToPage !== 'string') {
             res.locals.error = true;
             res.locals.errorMessage.push("linkToPage is required and should be more than 2 characters, less than 300 characters");
+        }
+        else {
+            let { linkToPage } = req.body;
+            linkToPage = linkToPage.trim();
+            if (linkToPage.length < 2 || linkToPage.length > 300 || linkToPage === "") {
+                res.locals.error = true;
+                res.locals.errorMessage.push("linkToPage is required and should be more than 2 characters, less than 300 characters");
+            }
         }
         if (req.body.color) {
             let { color } = req.body;
@@ -114,15 +126,22 @@ const createCategoryValidator = (req, res, next) => {
                 res.locals.errorMessage.push("bigImage should be string less than 255 characters");
             }
         }
-        let { body } = req.body;
-        body = body.trim();
-        if (!body || typeof body !== 'string' || name === "") {
+        if (!req.body.body || typeof req.body.body !== 'string') {
             res.locals.error = true;
             res.locals.errorMessage.push("body is required");
         }
+        else {
+            let { body } = req.body;
+            body = body.trim();
+            if (body === "") {
+                res.locals.error = true;
+                res.locals.errorMessage.push("body is required");
+            }
+        }
+
         next();
     } catch (error) {
-        res.status(500).json({success: false, message: error, data: null});
+        res.status(500).json({ success: false, message: error, data: null });
     }
 };
 //Category Validation for update
@@ -180,7 +199,7 @@ const updateCategoryValidator = (req, res, next) => {
                 res.locals.errorMessage.push("linkToPage is required and should be more than 2 characters, less than 300 characters");
             }
         }
-    
+
         if (req.body.color) {
             let { color } = req.body;
             color = color.trim();
@@ -255,7 +274,7 @@ const updateCategoryValidator = (req, res, next) => {
         }
         next()
     } catch (error) {
-        res.status(500).json({success: false, message: error, data: null});
+        res.status(500).json({ success: false, message: error, data: null });
     }
 };
 module.exports = { createCategoryValidator, updateCategoryValidator };
