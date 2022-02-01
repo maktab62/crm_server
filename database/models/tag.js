@@ -3,7 +3,7 @@ const sequelize = require("../connection");
 const CreatedAdmin = require("./admin");
 const UpdatedAdmin = require("./admin");
 
-const Category = sequelize.define('category', {
+const Tag = sequelize.define('tag', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -17,39 +17,17 @@ const Category = sequelize.define('category', {
         type: DataTypes.INTEGER,
         default: null
     },
-    setMenu: {
-        type: DataTypes.BOOLEAN,
-        default: true
-    },
-    setIndex: {
-        type: DataTypes.BOOLEAN,
-        default: true
-    },
     name: {
         type: DataTypes.STRING(100),
         allowNull: false,
         len: [2, 100],
         validate: {
             notNull: {
-                msg: 'Please enter category name'
+                msg: 'Please enter tag name'
             },
             notEmpty: {
                 args: [true],
                 msg: 'name could not be empty'
-            }
-        }
-    },
-    linkToPage: {
-        type: DataTypes.STRING(30),
-        allowNull: false,
-        len: [2, 300],
-        validate: {
-            notNull: {
-                msg: 'Please enter category link to page'
-            },
-            notEmpty: {
-                args: [true],
-                msg: 'category link to page could not be empty'
             }
         }
     },
@@ -89,21 +67,21 @@ const Category = sequelize.define('category', {
         type: DataTypes.TEXT
     }
 }, {
-    tableName: "categories",
+    tableName: "tags",
     timestamps: true,
     paranoid: true
 });
 
-Category.belongsTo(Category, {
-    foreignKey: 'categoryId'
+Tag.belongsTo(Tag, {
+    foreignKey: 'tagId'
 });
 
-CreatedAdmin.hasMany(Category, {
+CreatedAdmin.hasMany(Tag, {
     foreignKey: 'createdId'
 });
 
-UpdatedAdmin.hasMany(Category, {
+UpdatedAdmin.hasMany(Tag, {
     foreignKey: 'updatedId'
 });
 
-module.exports = Category;
+module.exports = Tag;
