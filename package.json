@@ -1,0 +1,27 @@
+{
+    "name": "crm-server",
+    "version": "0.0.0",
+    "private": true,
+    "scripts": {
+        "start": "cross-env NODE_ENV=production node ./bin/www",
+        "test": "cross-env NODE_ENV=test jest",
+        "dev": "cross-env NODE_ENV=development nodemon ./bin/www",
+        "migrate": "node ./database/migrate"
+    },
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "cookie-parser": "~1.4.6",
+        "cross-env": "^7.0.3",
+        "debug": "~4.3.3",
+        "dotenv": "^16.0.0",
+        "express": "~4.17.2",
+        "morgan": "~1.10.0",
+        "mysql2": "^2.3.3",
+        "sequelize": "^6.15.0"
+    },
+    "devDependencies": {
+        "jest": "^27.4.7",
+        "nodemon": "^2.0.15",
+        "supertest": "^6.2.2"
+    }
+}
