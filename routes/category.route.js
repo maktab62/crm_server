@@ -1,19 +1,23 @@
 const express = require('express');
 const router = express.Router();
-const { createCategoryValidator, updateCategoryValidator } = require('../middlewares/category.middleware');
-const { readCategory, createCategory, updateCategory, deleteCategory } = require('../controllers/category.controller');
-router.route('/')
+const wrapper = require('../middlewares/category.middleware');
+const { _read, _create, _update, _delete } = require('../controllers/category.controller');
 
+router.route('/')
     //read Category
-    .get(readCategory)
+    .get(_read)
 
     //create Category
-    .post(createCategoryValidator, createCategory)
+    .post(wrapper("create"), _create)
+
+router.route('/:id')
+    //read Category with filter
+    .get(_read)
 
     // update Category
-    .patch(updateCategoryValidator, updateCategory)
+    .patch(wrapper("update"), _update)
 
     //delete Company
-    .delete(deleteCategory);
+    .delete(_delete);
 
 module.exports = router;
