@@ -14,6 +14,7 @@ if(process.env.NODE_ENV === 'production') {
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+const tagRouter = require('./routes/tag.route.js');
 
 var app = express();
 
@@ -25,5 +26,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/tag', tagRouter);
 
 module.exports = app;
