@@ -8,6 +8,13 @@ const _read = safeCall(async (request, response, _next) => {
 
     if (request.params.id) {
         const category = await Category.findByPk(request.params.id);
+
+        if (!category)
+            return response.status(404).json({
+                success: false,
+                message: "id not found"
+            });
+
         return response.status(200).json({
             success: true,
             message: "find successful",
@@ -15,10 +22,17 @@ const _read = safeCall(async (request, response, _next) => {
         });
     }
 
-    if (request.body) {
+    if (request.body && Object.keys(request.body).length !== 0) {
         const category = await Category.findAll({
-            where: { [request.body.data ] : { [Op.like]: request.body.value } }
+            where: { [request.body.data]: { [Op.like]: request.body.value } }
         });
+
+        if (!category)
+            return response.status(404).json({
+                success: false,
+                message: "id not found"
+            });
+
         return response.status(200).json({
             success: true,
             message: "find successful",
@@ -47,6 +61,13 @@ const _read = safeCall(async (request, response, _next) => {
     // }
 
     const category = await Category.findAll({});
+
+    if (!category)
+        return response.status(404).json({
+            success: false,
+            message: "id not found"
+        });
+
     return response.status(200).json({
         success: true,
         message: "find successful",
@@ -97,10 +118,16 @@ const _update = safeCall(async (request, response, _next) => {
 });
 const _delete = safeCall(async (request, response, _next) => {
 
-    await Category.destroy({
+    const deletedCategory = await Category.destroy({
         where:
             { id: request.params.id }
     })
+
+    if (!deletedCategory)
+        return response.status(404).json({
+            success: false,
+            message: "id not found"
+        });
 
     return response.status(200).json({
         success: true,
