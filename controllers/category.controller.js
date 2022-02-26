@@ -3,6 +3,7 @@ const { Op } = require('sequelize');
 const safeCall = require('../utils/safeCall.utils');
 // database model
 const Category = require('../database/models/category');
+const deletePicture = require('../utils/deletePicture.utils');
 
 const _read = safeCall(async (request, response, _next) => {
 
@@ -84,6 +85,19 @@ const _create = safeCall(async (request, response, _next) => {
             message: response.locals.errorMessage
         });
 
+    if (request.files['smallImage']) {
+        request.body.smallImage = request.files['smallImage'][0].filename
+    }
+    if (request.files['bigImage']) {
+        request.body.bigImage = request.files['bigImage'][0].filename
+    }
+    if (request.files['bannerImage']) {
+        request.body.bannerImage = request.files['bannerImage'][0].filename
+    }
+    if (request.files['iconImage']) {
+        request.body.iconImage = request.files['iconImage'][0].filename
+    }
+
     const createdCategory = await Category.create(request.body);
 
     return response.status(200).json({
@@ -101,6 +115,25 @@ const _update = safeCall(async (request, response, _next) => {
             success: false,
             message: response.locals.errorMessage
         });
+
+    const category = await Category.findByPk(request.params.id);
+
+    if (request.files['smallImage'] && category.smallImage) {
+        request.body.smallImage = request.files['smallImage'][0].filename
+        deletePicture(category.smallImage);
+    }
+    if (request.files['bigImage'] && category.bigImage) {
+        request.body.bigImage = request.files['bigImage'][0].filename
+        deletePicture(category.bigImage);
+    }
+    if (request.files['bannerImage'] && category.bannerImage) {
+        request.body.bannerImage = request.files['bannerImage'][0].filename
+        deletePicture(category.bannerImage);
+    }
+    if (request.files['iconImage'] && category.iconImage) {
+        request.body.iconImage = request.files['iconImage'][0].filename
+        deletePicture(category.iconImage);
+    }
 
     const updatedCategory = await Category.update(request.body, { where: { id: request.params.id } });
 
