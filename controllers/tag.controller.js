@@ -8,7 +8,12 @@ const deletePicture = require('../utils/deletePicture.utils');
 const _read = safeCall(async (request, response, _next) => {
 
     if (request.params.id) {
-        const tag = await Tag.findByPk(request.params.id);
+        const tag = await Tag.findByPk(request.params.id, {
+            include: [{
+                model: Tag,
+                as: 'subTag',
+            }]
+        });
 
         if (!tag)
             return response.status(404).json({
@@ -25,7 +30,11 @@ const _read = safeCall(async (request, response, _next) => {
 
     if (request.body && Object.keys(request.body).length !== 0) {
         const tag = await Tag.findAll({
-            where: { [request.body.data]: { [Op.like]: request.body.value } }
+            where: { [request.body.data]: { [Op.like]: request.body.value } },
+            include: [{
+                model: Tag,
+                as: 'subTag'
+            }]
         });
 
         if (!tag)
@@ -61,7 +70,9 @@ const _read = safeCall(async (request, response, _next) => {
     //     });
     // }
 
-    const tag = await Tag.findAll({});
+    const tag = await Tag.findAll({
+        include: {model: Tag, as: 'subTag', required: false},
+    });
 
     if (!tag)
         return response.status(404).json({

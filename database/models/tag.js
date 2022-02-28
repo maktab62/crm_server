@@ -73,6 +73,7 @@ const Tag = sequelize.define('tag', {
 });
 
 Tag.belongsTo(Tag, {
+    as: "subTag",
     foreignKey: 'tagId'
 });
 
