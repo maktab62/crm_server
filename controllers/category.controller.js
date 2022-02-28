@@ -72,7 +72,7 @@ const _read = safeCall(async (request, response, _next) => {
     // }
 
     const category = await Category.findAll({
-        include: {model: Category, as: 'subCategory', required: true},
+        include: {model: Category, as: 'subCategory', required: false},
     });
 
     if (!category)
