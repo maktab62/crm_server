@@ -8,7 +8,13 @@ const deletePicture = require('../utils/deletePicture.utils');
 const _read = safeCall(async (request, response, _next) => {
 
     if (request.params.id) {
-        const category = await Category.findByPk(request.params.id);
+        const category = await Category.findByPk(
+            request.params.id, {
+            include: [{
+                model: Category,
+                as: 'subCategory'
+            }]
+        });
 
         if (!category)
             return response.status(404).json({
@@ -25,7 +31,11 @@ const _read = safeCall(async (request, response, _next) => {
 
     if (request.body && Object.keys(request.body).length !== 0) {
         const category = await Category.findAll({
-            where: { [request.body.data]: { [Op.like]: request.body.value } }
+            where: { [request.body.data]: { [Op.like]: request.body.value } },
+            include: [{
+                model: Category,
+                as: 'subCategory'
+            }]
         });
 
         if (!category)
@@ -61,7 +71,9 @@ const _read = safeCall(async (request, response, _next) => {
     //     });
     // }
 
-    const category = await Category.findAll({});
+    const category = await Category.findAll({
+        include: {model: Category, as: 'subCategory', required: true},
+    });
 
     if (!category)
         return response.status(404).json({

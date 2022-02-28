@@ -94,6 +94,7 @@ const Category = sequelize.define('category', {
 });
 
 Category.belongsTo(Category, {
+    as: 'subCategory',
     foreignKey: 'categoryId'
 });
 
